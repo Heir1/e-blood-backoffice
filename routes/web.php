@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('admin', [AdminController::class, 'viewadmin']);
+Route::get('admin/hopitaux', [AdminController::class, 'viewhospital']);
+Route::get('admin/ajouterhopital', [AdminController::class, 'addhospital']);
+Route::post('admin/ajouterhopital', [AdminController::class, 'ajouterhopital']);
+Route::get('admin/edithospital/{id}', [AdminController::class, 'edithospital']);
+Route::put('admin/updatehospital/{id}', [AdminController::class, 'updatehospital']);
+Route::delete('admin/deletehospital/{id}', [AdminController::class, 'deletehospital']);
