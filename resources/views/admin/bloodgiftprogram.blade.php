@@ -1,7 +1,7 @@
 @extends('admin_layout.master')
 
 @section('title')
-    Hopitaux
+    Blood gift
 @endsection
 
 @section('content')
@@ -9,10 +9,10 @@
     <div class="content-wrapper">
         <section class="content-header">
            <div class="content-header-left">
-              <h1>Hopitaux</h1>
+              <h1>Blood gift programs</h1>
            </div>
            <div class="content-header-right">
-              <a href="{{ url('admin/addhospital', []) }}" class="btn btn-primary btn-sm">Ajouter un hopital</a>
+              <a href="{{ url('admin/addbloodgift', []) }}" class="btn btn-primary btn-sm">Ajouter un nouveau</a>
            </div>
         </section>
 
@@ -38,7 +38,7 @@
                   </div>
                </div>
             </section> 
-      @endif
+         @endif
 
         <section class="content">
            <div class="row">
@@ -49,31 +49,26 @@
                           <thead>
                              <tr>
                                 <th>#</th>
-                                <th>Nom</th>
-                                <th>Adresse</th>
-                                <th>Email</th>
-                                <th>Tél.</th>
-                                <th>Mot de passe</th>
+                                <th>Dates et Heures</th>
+                                <th>Nom du Camp</th>
                                 <th>Actions</th>
                              </tr>
                           </thead>
                           <tbody>
-                            @foreach ($hospitals as $hospital)
+                            @foreach ($giftprograms as $giftprogram)
                                 <tr>
                                     <td>{{$increment++}}</td>
-                                    <td>{{$hospital->hospital_name}}</td>
-                                    <td>{{$hospital->hospital_address}}</td>
-                                    <td>{{$hospital->hospital_email}}</td>
-                                    <td>{{$hospital->hospital_phone}}</td>
-                                    <td>{{$hospital->hospital_password}}</td>
-                                    <td style=" display: flex ">
-                                        <a href="{{ url('admin/edithospital', [$hospital->id]) }}" class="btn btn-primary btn-xs">Edit</a>
+                                    <td>{{$giftprogram->dateandhour}}</td>
+                                    <td>{{$giftprogram->campname}}</td>
+                                    <td style=" display: flex "> 
+                                       <a href="{{ url('admin/editbloodgiftprogram', [$giftprogram->id]) }}" class="btn btn-primary btn-xs">Edit</a>
 
-                                        <form action=" {{ url('admin/deletehospital', [$hospital->id]) }} " method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" style="margin-left: 5px;" class="btn btn-danger btn-xs">Delete</button>
-                                        </form>
+                                       <form action=" {{ url('admin/deletebloodgiftprogram', [$giftprogram->id]) }} " method="post">
+                                          @csrf
+                                          @method('DELETE')
+                                          <button type="submit" style="margin-left: 5px;" class="btn btn-danger btn-xs">Delete</button>
+                                       </form>
+
                                     </td>
                                 </tr>
                             @endforeach

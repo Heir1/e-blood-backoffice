@@ -1,7 +1,7 @@
-@extends('admin_layout.master')
+@extends('hospital_layout.master')
 
 @section('title')
-    Editer
+    Modifier un stock
 @endsection
 
 @section('content')
@@ -9,13 +9,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <div class="content-header-left">
-                <h1>Editer l'hopital</h1>
+                <h1>Modifier la quantité du stock</h1>
             </div>
             <div class="content-header-right">
-                <a href="{{ url('admin/hospitals', []) }}" class="btn btn-primary btn-sm">Retour</a>
+                <a href="{{ url('hospital/stocks', []) }}" class="btn btn-primary btn-sm">Voir tous les stocks</a>
             </div>
         </section>
-        @if (Session::has("status"))
+        @if (Session::get("status"))
             <section class="content" style="min-height:auto;margin-bottom: -30px;">
                 <div class="row">
                     <div class="col-md-12">
@@ -55,43 +55,19 @@
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <form class="form-horizontal" action=" {{ url('admin/updatehospital', [$hospital->id]) }} " method="post">
+                    <form class="form-horizontal" action=" {{ url('hospital/updatestockquantity', [$stocktrace->id]) }} " method="post">
                         @csrf
-                        @method('PUT')
+                        @method('PATCH')
                         <div class="box box-info">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Nom <span>*</span></label>
+                                    <label for="" class="col-sm-3 control-label">Quantité <span>*</span></label>
                                     <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="hospital_name" value="{{$hospital->hospital_name}}" required>
+                                    <input type="number" class="form-control" name="bloodsquantity" value="{{$stocktrace->bloodsquantity}}" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Adresses <span>*</span></label>
-                                    <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="hospital_address" value="{{$hospital->hospital_address}}" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Email <span>*</span></label>
-                                    <div class="col-sm-4">
-                                    <input type="email" class="form-control" name="hospital_email" value="{{$hospital->hospital_email}}"  required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Téléphone <span>*</span></label>
-                                    <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="hospital_phone" value="{{$hospital->hospital_phone}}" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Mot de passe <span>*</span></label>
-                                    <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="hospital_password" value="{{$hospital->hospital_password}}" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label"></label>
+                                    <label for="" class="col-sm-3 control-label"></label>
                                     <div class="col-sm-6">
                                     <button type="submit" class="btn btn-success pull-left" name="form1">Modifier</button>
                                     </div>

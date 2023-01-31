@@ -1,7 +1,7 @@
 @extends('admin_layout.master')
 
 @section('title')
-    Hopitaux
+    Stocks trace
 @endsection
 
 @section('content')
@@ -9,10 +9,7 @@
     <div class="content-wrapper">
         <section class="content-header">
            <div class="content-header-left">
-              <h1>Hopitaux</h1>
-           </div>
-           <div class="content-header-right">
-              <a href="{{ url('admin/addhospital', []) }}" class="btn btn-primary btn-sm">Ajouter un hopital</a>
+              <h1>Trace de Stocks</h1>
            </div>
         </section>
 
@@ -30,15 +27,15 @@
 
          @if (Session::has("error"))
             <section class="content" style="min-height:auto;margin-bottom: -30px;">
-               <div class="row">
-                  <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
                         <div class="callout callout-danger">
                         <p>{{Session::get('error')}}</p>
                         </div>
-                  </div>
-               </div>
+                    </div>
+                </div>
             </section> 
-      @endif
+        @endif
 
         <section class="content">
            <div class="row">
@@ -49,32 +46,22 @@
                           <thead>
                              <tr>
                                 <th>#</th>
-                                <th>Nom</th>
-                                <th>Adresse</th>
-                                <th>Email</th>
-                                <th>Tél.</th>
-                                <th>Mot de passe</th>
-                                <th>Actions</th>
+                                <th>Désignation</th>
+                                <th>Quantités</th>
+                                <th>Prix</th>
+                                <th>Hopital</th>
+                                <th>Date</th>
                              </tr>
                           </thead>
                           <tbody>
-                            @foreach ($hospitals as $hospital)
+                            @foreach ($stocktraces as $stocktrace)
                                 <tr>
                                     <td>{{$increment++}}</td>
-                                    <td>{{$hospital->hospital_name}}</td>
-                                    <td>{{$hospital->hospital_address}}</td>
-                                    <td>{{$hospital->hospital_email}}</td>
-                                    <td>{{$hospital->hospital_phone}}</td>
-                                    <td>{{$hospital->hospital_password}}</td>
-                                    <td style=" display: flex ">
-                                        <a href="{{ url('admin/edithospital', [$hospital->id]) }}" class="btn btn-primary btn-xs">Edit</a>
-
-                                        <form action=" {{ url('admin/deletehospital', [$hospital->id]) }} " method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" style="margin-left: 5px;" class="btn btn-danger btn-xs">Delete</button>
-                                        </form>
-                                    </td>
+                                    <td>{{$stocktrace->designation}}</td>
+                                    <td>{{$stocktrace->bloodsquantity}}</td>
+                                    <td>{{$stocktrace->bloodsprice}} FC</td>
+                                    <td>{{$stocktrace->hospital}}</td>
+                                    <td>{{$stocktrace->created_at}}</td>
                                 </tr>
                             @endforeach
                           </tbody>

@@ -14,7 +14,7 @@
             <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img src="{{asset('frontend/assets/uploads/user-1.png')}}" class="user-image" alt="User Image">
-                <span class="hidden-xs">Administrateur</span>
+                <span class="hidden-xs">{{Session::get("hospital")->hospital_name}}</span>
                 </a>
                 <ul class="dropdown-menu">
                 <li class="user-footer">
@@ -22,7 +22,7 @@
                         <a href="{{url('admin/editprofile')}}" class="btn btn-default btn-flat">Edit Profile</a>
                     </div>
                     <div>
-                        <a href="{{ url('admin/adminlogout', []) }}" class="btn btn-default btn-flat">Log out</a>
+                        <a href="{{ url('hospital/hospitallogout', []) }}" class="btn btn-default btn-flat">Log out</a>
                     </div>
                 </li>
                 </ul>

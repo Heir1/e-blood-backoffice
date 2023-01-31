@@ -12,15 +12,26 @@
                 <h1>Ajouter un hopital</h1>
             </div>
             <div class="content-header-right">
-                <a href="{{ url('admin/hopitaux', []) }}" class="btn btn-primary btn-sm">Voir tous les hopitaux</a>
+                <a href="{{ url('admin/hospitals', []) }}" class="btn btn-primary btn-sm">Voir tous les hopitaux</a>
             </div>
         </section>
-        @if (Session::get("status"))
+        @if (Session::has("status"))
             <section class="content" style="min-height:auto;margin-bottom: -30px;">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="callout callout-success">
                         <p>{{Session::get('status')}}</p>
+                        </div>
+                    </div>
+                </div>
+            </section> 
+        @endif
+        @if (Session::has("error"))
+            <section class="content" style="min-height:auto;margin-bottom: -30px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="callout callout-danger">
+                        <p>{{Session::get('error')}}</p>
                         </div>
                     </div>
                 </div>
@@ -44,7 +55,7 @@
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <form class="form-horizontal" action=" {{ url('admin/ajouterhopital', []) }} " method="post">
+                    <form class="form-horizontal" action=" {{ url('admin/savehospital', []) }} " method="post">
                         @csrf
                         <div class="box box-info">
                             <div class="box-body">
