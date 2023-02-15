@@ -56,6 +56,11 @@ Route::middleware([EnsureUserIsValid::class])->group(function () {
 Route::middleware([EnsureHospitalIsValid::class])->group(function () {
 
     Route::get('hospital/hospitaldashboard', [HospitalController::class, 'hospitaldashboard']);
+    Route::get('hospital/prices', [HospitalController::class, 'productsprices']);
+    Route::get('hospital/addprice', [HospitalController::class, 'addprice']);
+    Route::post('hospital/saveprice', [HospitalController::class, 'saveprice']);
+    Route::get('hospital/editprice/{id}', [HospitalController::class, 'editprice']);
+    Route::patch('hospital/updateprice/{id}', [HospitalController::class, 'updateprice']);
     Route::get('hospital/stocks', [HospitalController::class, 'viewstocks']);
     Route::get('hospital/addstock', [HospitalController::class, 'addstock']);
     Route::post('hospital/savestock', [HospitalController::class, 'savestock']);
@@ -64,5 +69,13 @@ Route::middleware([EnsureHospitalIsValid::class])->group(function () {
     Route::get('hospital/hospitallogout', [HospitalController::class, 'hospitallogout']);
     Route::get('hospital/stocktrace', [HospitalController::class, 'viewstocktrace']);
     Route::delete('hospital/deletequantity/{id}', [HospitalController::class, 'deletequantity']);
-
+    Route::get('hospital/editprofile/{id}', [HospitalController::class, 'editprofile']);
+    Route::put('hospital/updatepassword/{id}', [HospitalController::class, 'updatepassword']);
+    Route::get('hospital/bloodbagsearch', [HospitalController::class, 'bloodbagsearch']);
+    Route::get('hospital/addbloodbagtocart/{id}', [HospitalController::class, 'addbloodbagtocart']);
+    Route::get('hospital/bloodbagcart', [HospitalController::class, 'bloodbagcart']);
+    Route::put('hospital/udateqty/{id}', [HospitalController::class, 'udateqty']);
+    Route::delete('hospital/deletebloodbag/{id}', [HospitalController::class, 'deletebloodbag']);
+    Route::post('hospital/pay', [HospitalController::class, 'pay']);
 });
+

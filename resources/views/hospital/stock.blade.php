@@ -12,7 +12,7 @@
               <h1>Stocks</h1>
            </div>
            <div class="content-header-right">
-              <a href="{{ url('hospital/addstock', []) }}" class="btn btn-primary btn-sm">Ajouter un nouveau</a>
+              <a href="{{ url('hospital/addstock', []) }}" class="btn btn-primary btn-sm">Ajouter un nouveau stock</a>
            </div>
         </section>
 
@@ -21,7 +21,10 @@
                   <div class="row">
                      <div class="col-md-12">
                         <div class="callout callout-success">
-                        <p>{{Session::get('status')}}</p>
+                           <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                              <span aria-hidden="true">&times;</span>
+                           </button>
+                           <p>{{Session::get('status')}}</p>
                         </div>
                      </div>
                   </div>
@@ -33,7 +36,10 @@
                <div class="row">
                   <div class="col-md-12">
                         <div class="callout callout-danger">
-                        <p>{{Session::get('error')}}</p>
+                           <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                              <span aria-hidden="true">&times;</span>
+                           </button>
+                           <p>{{Session::get('error')}}</p>
                         </div>
                   </div>
                </div>

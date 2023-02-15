@@ -9,10 +9,10 @@
     <div class="content-wrapper">
         <section class="content-header">
            <div class="content-header-left">
-              <h1>Blood gift programs</h1>
+              <h1>Programmes de dons de sangs</h1>
            </div>
            <div class="content-header-right">
-              <a href="{{ url('admin/addbloodgift', []) }}" class="btn btn-primary btn-sm">Ajouter un nouveau</a>
+              <a href="{{ url('admin/addbloodgift', []) }}" class="btn btn-primary btn-sm">Ajouter un nouveau programme</a>
            </div>
         </section>
 
@@ -21,7 +21,10 @@
                   <div class="row">
                      <div class="col-md-12">
                         <div class="callout callout-success">
-                        <p>{{Session::get('status')}}</p>
+                           <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                              <span aria-hidden="true">&times;</span>
+                           </button>
+                           <p>{{Session::get('status')}}</p>
                         </div>
                      </div>
                   </div>
@@ -33,7 +36,10 @@
                <div class="row">
                   <div class="col-md-12">
                         <div class="callout callout-danger">
-                        <p>{{Session::get('error')}}</p>
+                           <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                              <span aria-hidden="true">&times;</span>
+                           </button>
+                           <p>{{Session::get('error')}}</p>
                         </div>
                   </div>
                </div>
@@ -61,12 +67,12 @@
                                     <td>{{$giftprogram->dateandhour}}</td>
                                     <td>{{$giftprogram->campname}}</td>
                                     <td style=" display: flex "> 
-                                       <a href="{{ url('admin/editbloodgiftprogram', [$giftprogram->id]) }}" class="btn btn-primary btn-xs">Edit</a>
+                                       <a href="{{ url('admin/editbloodgiftprogram', [$giftprogram->id]) }}" class="btn btn-primary btn-xs">Modifier</a>
 
                                        <form action=" {{ url('admin/deletebloodgiftprogram', [$giftprogram->id]) }} " method="post">
                                           @csrf
                                           @method('DELETE')
-                                          <button type="submit" style="margin-left: 5px;" class="btn btn-danger btn-xs">Delete</button>
+                                          <button type="submit" style="margin-left: 5px;" class="btn btn-danger btn-xs">Supprimer</button>
                                        </form>
 
                                     </td>

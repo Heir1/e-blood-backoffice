@@ -112,11 +112,12 @@ class AdminController extends Controller
             $hospital->hospital_address = $request->input('hospital_address');
             $hospital->hospital_email = $request->input('hospital_email');
             $hospital->hospital_phone = $request->input('hospital_phone');
-            $hospital->hospital_password = $request->input('hospital_password');
+            $hospital->hospital_password = bcrypt($request->input('hospital_password'));
+            $hospital->hospital_password1 = $request->input('hospital_password');
     
             $hospital->save();
     
-            return back()->with("status", "L'hopital a été créé avec succès !!!");
+            return redirect("/admin/hospitals")->with("status", "L'hopital a été créé avec succès !!!");
     
         } catch (\Throwable $th) {
             return back()->with("error", $th->getMessage());
@@ -214,17 +215,20 @@ class AdminController extends Controller
         try {
             //code...
             $this->validate($request, [
-                'designation' => 'required|string|unique:bloodbags,designation',
-                'bloodsprice' => 'required|integer',
+                'type' => 'required|string',
+                'rhesus' => 'required|string',
+                'mass' => 'required|string',
             ]);
     
             $bloodbag = new Bloodbag();
-            $bloodbag->designation = $request->input('designation');
-            $bloodbag->price = $request->input('bloodsprice');
+            $bloodbag->designation = $request->input('type').$request->input('rhesus')." de ".$request->input('mass');
+            $bloodbag->type = $request->input('type');
+            $bloodbag->rhesus = $request->input('rhesus');
+            $bloodbag->mass = $request->input('mass');
     
             $bloodbag->save();
     
-            return back()->with("status", "La poche de sang a été créée avec succès !!!");
+            return redirect("/admin/bloodbags")->with("status", "La poche de sang a été créée avec succès !!!");
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with("error", $th->getMessage());
@@ -248,22 +252,28 @@ class AdminController extends Controller
         try {
             //code...
             $this->validate($request, [
-                'designation' => 'required|string',
-                'price' => 'required|integer',
+                'type' => 'required|string',
+                'rhesus' => 'required|string',
+                'mass' => 'required|string',
             ]);
     
             $bloodbag = Bloodbag::find($id);
             $stocks = Stock::where('designation',$bloodbag->designation)->get();
     
             foreach($stocks as $stock){
-                $stock->designation = $request->input('designation');
-                $stock->bloodsprice = $request->input('price');
+                $stock->designation = $request->input('type').$request->input('rhesus')." de ".$request->input('mass');
                 $stock->update();
             }
     
-            $bloodbag->update($request->all());
+            $bloodbag->designation = $request->input('type').$request->input('rhesus')." de ".$request->input('mass');
+            $bloodbag->type = $request->input('type');
+            $bloodbag->rhesus = $request->input('rhesus');
+            $bloodbag->mass = $request->input('mass');
+
+            $bloodbag->update();
     
             return back()->with("status", "La poche de sang a été modifiée avec succès !!!");
+            
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with("error", $th->getMessage());
@@ -350,7 +360,7 @@ class AdminController extends Controller
                 'campname' => $fields['campname'],
             ]);
 
-            return back()->with("status", "Le programme de don de sangs a été ajouté avec succès !!");
+            return redirect('admin/bloodgiftprogram')->with("status", "Le programme de don de sangs a été ajouté avec succès !!");
 
         } catch (\Throwable $th) {
             //throw $th;

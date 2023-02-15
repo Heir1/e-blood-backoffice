@@ -20,7 +20,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="callout callout-success">
-                        <p>{{Session::get('status')}}</p>
+                            <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                                <span aria-hidden="true">&times;</span>
+                             </button>
+                            <p>{{Session::get('status')}}</p>
                         </div>
                     </div>
                 </div>
@@ -31,7 +34,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="callout callout-danger">
-                        <p>{{Session::get('error')}}</p>
+                            <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                                <span aria-hidden="true">&times;</span>
+                             </button>
+                            <p>{{Session::get('error')}}</p>
                         </div>
                     </div>
                 </div>
@@ -42,6 +48,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="callout callout-danger">
+                        <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                            <span aria-hidden="true">&times;</span>
+                         </button>
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{$error}}</li>
@@ -55,12 +64,12 @@
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <form class="form-horizontal" action=" {{ url('hospital/savestock', []) }} " method="post">
+                    <form class="form-horizontal" action=" {{ url('hospital/savestock', []) }} " method="post" onsubmit="disableButton">
                         @csrf
                         <div class="box box-info">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label for="" class="col-sm-3 control-label">Désignation <span>*</span></label>
+                                    <label for="" class="col-sm-3">Désignation <span>*</span></label>
                                     <div class="col-sm-4">
                                     <select name="designation" class="form-control select2" required>
                                         <option value="">Veuillez séléctionner</option>
@@ -71,15 +80,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-3 control-label">Quantité <span>*</span></label>
+                                    <label for="" class="col-sm-3">Quantité <span>*</span></label>
                                     <div class="col-sm-4">
-                                    <input type="number" class="form-control" name="bloodsquantity" required>
+                                    <input type="number" class="form-control" name="bloodsquantity" min="1" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-3 control-label"></label>
+                                    <label for="" class="col-sm-3"></label>
                                     <div class="col-sm-6">
-                                    <button type="submit" class="btn btn-success pull-left" name="form1">Ajouter</button>
+                                    <button type="submit" class="btn btn-success pull-left" name="form1" id="form1">Ajouter</button>
                                     </div>
                                 </div>
                             </div>

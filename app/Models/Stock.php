@@ -13,6 +13,7 @@ class Stock extends Model
         'designation',
         'bloodsquantity',
         'bloodsprice',
-        'hospital'
+        'hospital',
+        'address'
     ];
 }

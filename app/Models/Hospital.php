@@ -14,6 +14,8 @@ class Hospital extends Model
         'hospital_address',
         'hospital_email',
         'hospital_phone',
-        'hospital_password'
+        'hospital_password',
+        'hospital_password1',
+        'password_status'
     ];
 }

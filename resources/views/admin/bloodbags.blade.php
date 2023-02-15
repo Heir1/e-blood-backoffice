@@ -12,7 +12,7 @@
               <h1>Poches</h1>
            </div>
            <div class="content-header-right">
-              <a href="{{ url('admin/addbloodbag', []) }}" class="btn btn-primary btn-sm">Ajouter une poche</a>
+              <a href="{{ url('admin/addbloodbag', []) }}" class="btn btn-primary btn-sm">Ajouter une poche de sang</a>
            </div>
         </section>
 
@@ -21,7 +21,10 @@
                   <div class="row">
                      <div class="col-md-12">
                         <div class="callout callout-success">
-                        <p>{{Session::get('status')}}</p>
+                           <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                              <span aria-hidden="true">&times;</span>
+                           </button>
+                           <p>{{Session::get('status')}}</p>
                         </div>
                      </div>
                   </div>
@@ -33,7 +36,10 @@
                <div class="row">
                   <div class="col-md-12">
                         <div class="callout callout-danger">
-                        <p>{{Session::get('error')}}</p>
+                           <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                              <span aria-hidden="true">&times;</span>
+                           </button>
+                           <p>{{Session::get('error')}}</p>
                         </div>
                   </div>
                </div>
@@ -50,7 +56,6 @@
                              <tr>
                                 <th>#</th>
                                 <th>Désignation</th>
-                                <th>Prix</th>
                                 <th>Actions</th>
                              </tr>
                           </thead>
@@ -59,14 +64,13 @@
                                 <tr>
                                     <td>{{$increment++}}</td>
                                     <td>{{$bloodbag->designation}}</td>
-                                    <td>{{$bloodbag->price." FC"}}</td>
                                     <td style=" display: flex ">
-                                        <a href="{{ url('admin/editbloodbag', [$bloodbag->id]) }}" class="btn btn-primary btn-xs">Edit</a>
+                                        <a href="{{ url('admin/editbloodbag', [$bloodbag->id]) }}" class="btn btn-primary btn-xs">Modifier</a>
 
                                         <form action=" {{ url('admin/deletebloodbag', [$bloodbag->id]) }} " method="post">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" style="margin-left: 5px;" class="btn btn-danger btn-xs">Delete</button>
+                                        <button type="submit" style="margin-left: 5px;" class="btn btn-danger btn-xs">Supprimer</button>
                                         </form>
                                     </td>
                                 </tr>

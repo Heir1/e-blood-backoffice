@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bloodbag extends Model
+class Productprice extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'designation',
-        'type',
-        'rhesus',
-        'mass',
-        'price_status',
+        'price',
     ];
 }

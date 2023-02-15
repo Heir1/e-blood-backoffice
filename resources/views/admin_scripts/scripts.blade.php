@@ -21,6 +21,21 @@
 <script src="{{asset('backend/admin/js/demo.js')}}"></script>
 <script src="{{asset('backend/admin/js/summernote.js')}}"></script>
 <script>
+    function closediv(e){
+        e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+    }
+</script>
+<script language='javascript' type='text/javascript'>
+    function check(input) {
+        if (input.value != document.getElementById('password').value) {
+            input.setCustomValidity('Password Must be Matching.');
+        } else {
+            // input is valid -- reset the error message
+            input.setCustomValidity('');
+        }
+    }
+</script>
+<script>
     $(document).ready(function() {
             $('#editor1').summernote({
                 height: 300

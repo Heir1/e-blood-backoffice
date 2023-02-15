@@ -13,10 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bloodbags', function (Blueprint $table) {
+        Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->string("designation")->unique();
-            $table->integer("price");
+            $table->string("designation");
+            $table->integer("bloodsquantity");
+            $table->integer("bloodsprice");
+            $table->string("hospital");
+	        $table->string("address");
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bloodbags');
+        Schema::dropIfExists('stocks');
     }
 };

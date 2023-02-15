@@ -20,7 +20,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="callout callout-success">
-                        <p>{{Session::get('status')}}</p>
+                            <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                                <span aria-hidden="true">&times;</span>
+                             </button>
+                            <p>{{Session::get('status')}}</p>
                         </div>
                     </div>
                 </div>
@@ -31,6 +34,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="callout callout-danger">
+                        <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                            <span aria-hidden="true">&times;</span>
+                         </button>
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{$error}}</li>
@@ -46,7 +52,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="callout callout-danger">
-                        <p>{{Session::get('error')}}</p>
+                            <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                                <span aria-hidden="true">&times;</span>
+                             </button>
+                            <p>{{Session::get('error')}}</p>
                         </div>
                     </div>
                 </div>
@@ -60,13 +69,30 @@
                         <div class="box box-info">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label for="" class="col-sm-3 control-label">Dates et Heures <span>*</span></label>
+                                    <label for="" class="col-sm-3">Date <span>*</span></label>
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" name="dateandhour" required>
+                                        <input type="date" name="p_date" class="form-control" required>
+                                    </div>
+                                    {{-- $this->validate($request, [
+                                        'time_start' => 'date_format:H:i',
+                                        'time_end' => 'date_format:H:i|after:time_start',
+                                    ]); --}}
+                                
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="col-sm-3">Heure du début <span>*</span></label>
+                                    <div class="col-sm-4">
+                                        <input type="time" name="p_starthour" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-3 control-label">Nom du camp <span>*</span></label>
+                                    <label for="" class="col-sm-3">Heure de fin <span>*</span></label>
+                                    <div class="col-sm-4">
+                                        <input type="time" name="p_endhour" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="col-sm-3">Nom du camp <span>*</span></label>
                                     <div class="col-sm-4">
                                     <input type="text" class="form-control" name="campname" required >
                                     </div>

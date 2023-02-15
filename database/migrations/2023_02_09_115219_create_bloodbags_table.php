@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('hospitals', function (Blueprint $table) {
+        Schema::create('bloodbags', function (Blueprint $table) {
             $table->id();
-            $table->string("hospital_name");
-            $table->string("hospital_address");
-            $table->string("hospital_email");
-            $table->string("hospital_phone");
-            $table->string("hospital_password")->unique();
+            $table->string("designation")->unique();
+            $table->string("type");
+            $table->string("rhesus");
+            $table->string("mass");
+            $table->integer("price_status")->default(0);
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hospitals');
+        Schema::dropIfExists('bloodbags');
     }
 };

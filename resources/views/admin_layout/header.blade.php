@@ -1,7 +1,7 @@
 <!-- start header  -->
 <header class="main-header">
     <a href="index.php" class="logo">
-    <span class="logo-lg">E-Blood Bank</span>
+    <span class="logo-lg">E-Blood Bank Makila</span>
     </a>
     <nav class="navbar navbar-static-top">
     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
@@ -13,7 +13,7 @@
         <ul class="nav navbar-nav">
             <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="{{asset('frontend/assets/uploads/user-1.png')}}" class="user-image" alt="User Image">
+                <img src="{{asset('frontend/assets/uploads/user-1.png')}}" class="user-image" alt="User Image" style="border : 2px solid white ">
                 <span class="hidden-xs">Administrateur</span>
                 </a>
                 <ul class="dropdown-menu">

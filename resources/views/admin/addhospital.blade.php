@@ -20,7 +20,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="callout callout-success">
-                        <p>{{Session::get('status')}}</p>
+                            <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                                <span aria-hidden="true">&times;</span>
+                             </button>
+                            <p>{{Session::get('status')}}</p>
                         </div>
                     </div>
                 </div>
@@ -31,7 +34,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="callout callout-danger">
-                        <p>{{Session::get('error')}}</p>
+                            <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                                <span aria-hidden="true">&times;</span>
+                             </button>
+                            <p>{{Session::get('error')}}</p>
                         </div>
                     </div>
                 </div>
@@ -42,6 +48,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="callout callout-danger">
+                        <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                            <span aria-hidden="true">&times;</span>
+                         </button>
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{$error}}</li>
@@ -60,37 +69,43 @@
                         <div class="box box-info">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Nom <span>*</span></label>
+                                    {{-- control-label --}}
+                                    <label for="" class="col-sm-2">Nom <span>*</span></label>
                                     <div class="col-sm-4">
                                     <input type="text" class="form-control" name="hospital_name" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Adresses <span>*</span></label>
+                                    {{-- control-label --}}
+                                    <label for="" class="col-sm-2">Adresses <span>*</span></label>
                                     <div class="col-sm-4">
                                     <input type="text" class="form-control" name="hospital_address" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Email <span>*</span></label>
+                                    {{-- control-label --}}
+                                    <label for="" class="col-sm-2">Email <span>*</span></label>
                                     <div class="col-sm-4">
                                     <input type="email" class="form-control" name="hospital_email" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Téléphone <span>*</span></label>
+                                    {{-- control-label --}}
+                                    <label for="" class="col-sm-2">Téléphone <span>*</span></label>
                                     <div class="col-sm-4">
                                     <input type="text" class="form-control" name="hospital_phone" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label">Mot de passe <span>*</span></label>
+                                    {{-- control-label --}}
+                                    <label for="" class="col-sm-2">Mot de passe <span>*</span></label>
                                     <div class="col-sm-4">
                                     <input type="text" class="form-control" name="hospital_password" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-2 control-label"></label>
+                                    {{-- control-label --}}
+                                    <label for="" class="col-sm-2"></label>
                                     <div class="col-sm-6">
                                     <button type="submit" class="btn btn-success pull-left" name="form1">Ajouter</button>
                                     </div>

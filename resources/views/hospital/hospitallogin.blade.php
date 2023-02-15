@@ -15,10 +15,13 @@
       <link rel="stylesheet" href="{{asset('backend/admin/css/AdminLTE.min.css')}}">
       <link rel="stylesheet" href="{{asset('backend/admin/css/_all-skins.min.css')}}">
       <link rel="stylesheet" href="{{asset('backend/admin/style.css')}}">
+      <link rel="icon" type="image/png" sizes="32x32" href="{{asset('frontend/assets/uploads/user-1.png')}}" />
    </head>
    <body class="hold-transition login-page sidebar-mini">
-      <div class="login-box">
+      <div class="login-box" style="margin-top: 30px">
             <div class="login-logo">
+                <img src="{{asset('frontend/assets/uploads/user-1.png')}}" style="border-radius: 50%; width: 25%; border : 3px solid black " class="user-image" alt="User Image">
+                <br>
                 <b>Panneau d'administrateur</b>
             </div>
             <div class="login-box-body">
