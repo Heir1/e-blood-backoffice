@@ -19,10 +19,10 @@ namespace App\Models;
 
         }
 
-        public function add($item){
+        public function add($item, $bloodsquantity){
 
             $storedItem = ['qty' => 0, 'product_id' => 0, 'designation' => $item->designation,
-            'bloodsprice' => $item->bloodsprice, 'item' =>$item];
+            'bloodsprice' => $item->bloodsprice, 'bloodsquantity' => $bloodsquantity, 'hospital' => $item->hospital, 'item' =>$item];
 
             if($this->items){
                 if(array_key_exists($item->id, $this->items)){
@@ -34,6 +34,9 @@ namespace App\Models;
             $storedItem['product_id'] = $item->id;
             $storedItem['designation'] = $item->designation;
             $storedItem['bloodsprice'] = $item->bloodsprice;
+            $storedItem['bloodsquantity'] = $bloodsquantity;
+            $storedItem['hospital'] = $item->hospital;
+
             $this->totalQty++;
             $this->totalPrice += $item->bloodsprice;
             $this->items[$item->id] = $storedItem;

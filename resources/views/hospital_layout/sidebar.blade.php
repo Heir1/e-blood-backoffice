@@ -27,6 +27,16 @@
             <i class="fa fa-inbox"></i> <span>Recherche de poche de sang</span>
             </a>
         </li>
+        <li class="treeview {{ request()->is("hospital/bloodbagorder") ? 'active' : '' }}">
+            <a href="{{url('hospital/bloodbagorder')}}">
+            <i class="fa fa-first-order"></i> <span>Achats</span>
+            </a>
+        </li>
+        <li class="treeview {{ request()->is("hospital/bloodsell") ? 'active' : '' }}">
+            <a href="{{url('hospital/bloodsell')}}">
+            <i class="fa fa-first-order"></i> <span>Commandes</span>
+            </a>
+        </li>
         <li class="treeview {{ request()->is("hospital/bloodbagcart") ? 'active' : '' }}">
             <a href="{{url('hospital/bloodbagcart')}}">
             <i class="fa fa-shopping-cart"></i> <span>{{Session::has('cart') ? (Session::get("cart")->totalQty > 1 ? Session::get("cart")->totalQty." poches au panier" : Session::get("cart")->totalQty." poche au panier" ) : "0"}} </span>
@@ -35,4 +45,9 @@
     </ul>
     </section>
 </aside>
-<!-- end  Side Bar to Manage Shop Activities -->
+
+<style>
+    .main-sidebar{
+        background-color: #3a0505 !important;
+    }
+</style>

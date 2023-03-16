@@ -20,6 +20,25 @@
 <script src="{{asset('backend/admin/js/clipboard.min.js')}}"></script>
 <script src="{{asset('backend/admin/js/demo.js')}}"></script>
 <script src="{{asset('backend/admin/js/summernote.js')}}"></script>
+<script language='javascript' type='text/javascript'>
+    var date = new Date();
+
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var today = year + "-" + month + "-" + day;       
+    document.getElementById("theDate").value = today;
+</script>
+<script>
+    var $form = $('#checkout-form');
+    $form.submit(function(event){
+        $form.find('button').prop('disabled', true);
+    });
+</script>
 <script>
     function closediv(e){
         e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
@@ -354,4 +373,39 @@
     
     
     
+</script>
+<script>
+    var x = document.getElementById("demo");
+    var y = document.getElementById("latitude");
+    var z = document.getElementById("longitude");
+    
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+    }
+    
+    function showPosition(position) {
+      y.value = position.coords.latitude;
+      z.value = position.coords.longitude;
+    }
+    
+    function showError(error) {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          x.innerHTML = "User denied the request for Geolocation."
+          break;
+        case error.POSITION_UNAVAILABLE:
+          x.innerHTML = "Location information is unavailable."
+          break;
+        case error.TIMEOUT:
+          x.innerHTML = "The request to get user location timed out."
+          break;
+        case error.UNKNOWN_ERROR:
+          x.innerHTML = "An unknown error occurred."
+          break;
+      }
+    }
 </script>

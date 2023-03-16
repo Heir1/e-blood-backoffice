@@ -73,9 +73,15 @@
                                     <div class="col-sm-4">
                                     <select name="designation" class="form-control select2" required>
                                         <option value="">Veuillez séléctionner</option>
-                                        @foreach ($bloodbags as $bloodbag)
-                                            <option value="{{$bloodbag->designation}}">{{$bloodbag->designation}}</option>
-                                        @endforeach
+                                        @if ($count==1)
+                                            @foreach ($bloodbags1 as $bloodbag)
+                                                <option value="{{$bloodbag}}">{{$bloodbag}}</option>    
+                                            @endforeach
+                                        @else
+                                            @foreach ($bloodbags as $bloodbag)
+                                                <option value="{{$bloodbag->designation}}">{{$bloodbag->designation}}</option>    
+                                            @endforeach
+                                        @endif
                                     </select>
                                     </div>
                                 </div>

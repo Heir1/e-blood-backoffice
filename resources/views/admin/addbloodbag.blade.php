@@ -91,13 +91,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-3">Masse <span>*</span></label>
+                                    <label for="" class="col-sm-3">Volume <span>*</span></label>
                                     <div class="col-sm-4">
                                         <select name="mass" class="form-control select2" required>
-                                                <option value="">Veuillez séléctionner la masse de la poche</option>
-                                                <option value="200 ml">200 ml</option>
-                                                <option value="500 ml">500 ml</option>
-                                                <option value="1000 ml">1000 ml</option>
+                                                <option value="">Veuillez séléctionner la volume de la poche</option>
+                                                @foreach ($masses as $masse)
+                                                    <option value="{{$masse->qty.' ml'}}">{{$masse->qty.' ml'}}</option>   
+                                                @endforeach
                                         </select>
                                     </div>
                                 </div>

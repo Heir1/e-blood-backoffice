@@ -1,7 +1,7 @@
-@extends('hospital_layout.master')
+@extends('admin_layout.master')
 
 @section('title')
-    Ajouter un stock
+    Ajouter un volume
 @endsection
 
 @section('content')
@@ -9,10 +9,10 @@
     <div class="content-wrapper">
         <section class="content-header">
             <div class="content-header-left">
-                <h1>Ajouter un stock</h1>
+                <h1>Création d'un nouveau volume</h1>
             </div>
             <div class="content-header-right">
-                <a href="{{ url('hospital/stocks', []) }}" class="btn btn-primary btn-sm">Voir tous les stocks</a>
+                <a href="{{ url('admin/volume', []) }}" class="btn btn-primary btn-sm">Voir tous les volumes</a>
             </div>
         </section>
         @if (Session::has("status"))
@@ -64,44 +64,14 @@
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <form class="form-horizontal" action=" {{ url('hospital/savestock', []) }} " method="post" onsubmit="disableButton">
+                    <form class="form-horizontal" action=" {{ url('add/savevolume', []) }} " method="post" onsubmit="disableButton">
                         @csrf
                         <div class="box box-info">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label for="" class="col-sm-3">Désignation <span>*</span></label>
+                                    <label for="" class="col-sm-3">Quantité en ml <span>*</span></label>
                                     <div class="col-sm-4">
-                                    <select name="designation" class="form-control select2" required>
-                                        <option value="">Veuillez séléctionner</option>
-                                        @foreach ($bloodbags as $bloodbag)
-                                            <option value="{{$bloodbag->designation}}">{{$bloodbag->designation}}</option>
-                                        @endforeach
-                                    </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="col-sm-3">Numéro du lot <span>*</span></label>
-                                    <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="batchcode" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="col-sm-3">Quantité <span>*</span></label>
-                                    <div class="col-sm-4">
-                                    <input type="number" class="form-control" name="bloodsquantity" min="1" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="col-sm-3">Date de prélèvement <span>*</span></label>
-                                    <div class="col-sm-4">
-                                    <input type="date" class="form-control" name="collectiondate" min="1" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="col-sm-3">Date d'expiration <span>*</span></label>
-                                    <div class="col-sm-4">
-                                    <input type="date" class="form-control" name="expirationdate" min="1" required>
-                                    {{-- <input type="date" id="theDate" class="form-control" name="bloodsquantity" min="1" required> --}}
+                                    <input type="number" class="form-control" min="1" name="qty" required>
                                     </div>
                                 </div>
                                 <div class="form-group">

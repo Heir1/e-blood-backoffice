@@ -96,13 +96,6 @@
                                 </div>
                                 <div class="form-group">
                                     {{-- control-label --}}
-                                    <label for="" class="col-sm-2">Mot de passe <span>*</span></label>
-                                    <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="hospital_password" value="{{$hospital->hospital_password}}" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    {{-- control-label --}}
                                     <label for="" class="col-sm-2"></label>
                                     <div class="col-sm-6">
                                     <button type="submit" class="btn btn-success pull-left" name="form1">Modifier</button>

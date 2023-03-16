@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
+use App\Mail\Contact;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use App\Models\Hospital;
+use App\Models\Mass;
 use App\Models\Bloodbag;
 use App\Models\Stock;
 use App\Models\Stocktrace;
@@ -29,7 +35,7 @@ class AdminController extends Controller
 
         try{
             $this->validate($request, [
-                'email' => 'required|string',
+                'email' => 'required|email',
                 'password' => 'required|string',
             ]);
     
@@ -95,26 +101,33 @@ class AdminController extends Controller
         }
     }
 
-    public function savehospital(Request $request){
+    public function savehospital(Request $request): RedirectResponse
+    {
 
         try {
             $this->validate($request, [
                 'hospital_name' => 'required|string',
                 'hospital_address' => 'required|string',
                 'hospital_email' => 'required|string|unique:hospitals,hospital_email',
-                'hospital_phone' => 'required|string',
-                'hospital_password' => 'required|string'
+                'hospital_phone' => 'required|string'
             ]);
+
+            $password = $request->input('hospital_email').mt_rand(1000,9999);
     
             $hospital = new Hospital();
+            $email = $request->input('hospital_email');
     
             $hospital->hospital_name = $request->input('hospital_name');
             $hospital->hospital_address = $request->input('hospital_address');
             $hospital->hospital_email = $request->input('hospital_email');
             $hospital->hospital_phone = $request->input('hospital_phone');
-            $hospital->hospital_password = bcrypt($request->input('hospital_password'));
-            $hospital->hospital_password1 = $request->input('hospital_password');
-    
+            $hospital->hospital_password = bcrypt($password);
+            
+            // Ship the order...
+            $recipent = $email;
+     
+            Mail::to($recipent)->send(new Contact($email, $password));
+            
             $hospital->save();
     
             return redirect("/admin/hospitals")->with("status", "L'hopital a été créé avec succès !!!");
@@ -145,8 +158,7 @@ class AdminController extends Controller
                 'hospital_name' => 'required|string',
                 'hospital_address' => 'required|string',
                 'hospital_email' => 'required|string',
-                'hospital_phone' => 'required|string',
-                'hospital_password' => 'required|string'
+                'hospital_phone' => 'required|string'
             ]);
 
             $hospital = Hospital::find($id);
@@ -187,6 +199,83 @@ class AdminController extends Controller
         }
     }
 
+    public function mass(){
+        try {
+            //code...
+            $masses = Mass::get();
+            $increment=1;
+            return view("admin.mass")->with("masses",$masses)->with("increment",$increment);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with("error", $th->getMessage());
+        }
+    }
+
+    public function addmass(){
+        try {
+            //code...
+            return view("admin.addmass");
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with("error", $th->getMessage());
+        }
+        
+    }
+
+    public function savemass(Request $request){
+        try {
+            //code...
+            $this->validate($request, [
+                'qty' => 'required|integer|unique:masses,qty',
+            ]);
+
+            $mass = new Mass();
+            $mass->qty = $request->input('qty');
+            $mass->unity = " ml";
+
+            $mass->save();
+
+            return redirect("admin/volume")->with("status", "La quantité de la masse a été créée avec succès !!!");
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with("error", $th->getMessage());
+        }
+    }
+
+    public function editmass($id){
+        try {
+            //code...
+            $masse = Mass::find($id);
+            return view("admin.editmass")->with("masse",$masse);
+            
+        } catch (\Throwable) {
+            //throw $th;
+            return back()->with("error", $th->getMessage());
+        }
+    }
+
+    public function updatemass(Request $request, $id){
+        try {
+            //code...
+
+            $this->validate($request, [
+                'qty' => 'required|integer|unique:masses,qty',
+            ]);
+
+            $mass = Mass::find($id);
+            $mass->qty = $request->input('qty');
+
+            $mass->update();
+
+            return redirect("admin/volume")->with("status", "La quantité de la masse a été modifiée avec succès !!!");
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with("error", $th->getMessage());
+        }
+    }
+
     public function bloodbags(){
 
         try {
@@ -204,7 +293,8 @@ class AdminController extends Controller
     public function addbloodbag(){
         try {
             //code...
-            return view("admin.addbloodbag");
+            $masses = Mass::get();
+            return view("admin.addbloodbag")->with("masses",$masses);
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with("error", $th->getMessage());

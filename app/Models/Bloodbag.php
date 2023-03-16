@@ -15,5 +15,13 @@ class Bloodbag extends Model
         'rhesus',
         'mass',
         'price_status',
+        'batchcode',
+        'collectiondate',
+        'expirationdate'
+    ];
+
+    protected $casts = [
+        'collectiondate' => 'date:d/m/Y',
+        'expirationdate' => 'date:d/m/Y'
     ];
 }

@@ -59,7 +59,6 @@
                                 <th>Adresse</th>
                                 <th>Email</th>
                                 <th>Tél.</th>
-                                <th>Mot de passe</th>
                                 <th>Actions</th>
                              </tr>
                           </thead>
@@ -71,11 +70,6 @@
                                     <td>{{$hospital->hospital_address}}</td>
                                     <td>{{$hospital->hospital_email}}</td>
                                     <td>{{$hospital->hospital_phone}}</td>
-                                    @if ($hospital->password_status == 0)
-                                       <td>{{ $hospital->hospital_password1 }}</td> 
-                                    @else
-                                        <td>Modifié</td>
-                                    @endif
                                     <td style=" display: flex ">
                                         <a href="{{ url('admin/edithospital', [$hospital->id]) }}" class="btn btn-primary btn-xs">Modifier</a>
 

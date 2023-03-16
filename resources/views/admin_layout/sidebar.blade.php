@@ -22,6 +22,11 @@
             <i class="fa fa-hospital-o"></i> <span>Hopitaux</span>
             </a>
         </li>
+        <li class="treeview {{ request()->is("admin/volume") || request()->is("volume") ? 'active' : '' }}">
+            <a href="{{url('admin/volume')}}">
+            <i class="fa fa-get-pocket"></i> <span>Volumes de sangs</span>
+            </a>
+        </li>
         <li class="treeview {{ request()->is("admin/bloodbags") || request()->is("admin/addbloodbag") ? 'active' : '' }}">
             <a href="{{url('admin/bloodbags')}}">
             <i class="fa fa-get-pocket"></i> <span>Poches de sang</span>
@@ -32,11 +37,11 @@
             <i class="fa fa-inbox"></i> <span>Stocks</span>
             </a>
         </li>
-        <li class="treeview {{ request()->is("admin/stocktrace") ? 'active' : '' }}">
+        {{-- <li class="treeview {{ request()->is("admin/stocktrace") ? 'active' : '' }}">
             <a href="{{url('admin/stocktrace')}}">
             <i class="fa fa-inbox"></i> <span>Trace de Stocks</span>
             </a>
-        </li>
+        </li> --}}
         <li class="treeview {{ request()->is("admin/bloodgiftprogram") ? 'active' : '' }}">
             <a href="{{url('admin/bloodgiftprogram')}}">
             <i class="fa fa-gift"></i> <span>Programme de dons de sang</span>
@@ -46,3 +51,8 @@
     </section>
 </aside>
 <!-- end  Side Bar to Manage Shop Activities -->
+<style>
+    .main-sidebar{
+        background-color: #3a0505 !important;
+    }
+</style>

@@ -108,7 +108,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-3">Masse <span>*</span></label>
+                                    <label for="" class="col-sm-3">Volume <span>*</span></label>
                                     <div class="col-sm-4">
                                         <select name="mass" class="form-control select2" required>
                                                 <option value="{{$bloodbag->mass}}">{{$bloodbag->mass}}</option>

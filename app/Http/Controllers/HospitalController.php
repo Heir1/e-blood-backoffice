@@ -12,6 +12,8 @@ use App\Models\Bloodbag;
 use App\Models\Stocktrace;
 use App\Models\Productprice;
 use App\Models\Cart;
+use App\Models\Order;
+use App\Models\Invoice;
 
 class HospitalController extends Controller
 {
@@ -32,7 +34,7 @@ class HospitalController extends Controller
         try {
             //code...
             $this->validate($request, [
-                'email' => 'required|string',
+                'email' => 'required|email',
                 'password' => 'required|string',
             ]);
     
@@ -44,7 +46,11 @@ class HospitalController extends Controller
             }
     
             Session::put("hospital", $hospital);
+
+            if($hospital->status == 0) return redirect('hospital/editprofile/'.$hospital->id);
+
             return redirect('hospital/hospitaldashboard');
+
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with("error", $th->getMessage());
@@ -76,7 +82,11 @@ class HospitalController extends Controller
         try {
             //code...
             $hospital = Hospital::find($id);
+
+            if(Session::get('hospital')->id != $id) return back();
+
             return view("hospital.editprofile")->with("hospital",$hospital);
+
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with("error", $th->getMessage());
@@ -88,16 +98,19 @@ class HospitalController extends Controller
             //code...
             $this->validate($request, [
                 'hospital_password' => 'required|string',
-                'hospital_password1' => 'required|string'
+                'latitude' => 'required|string',
+                'longitude' => 'required|string',
             ]);
 
             $hospital = Hospital::find($id);
             
             $hospital->hospital_password = bcrypt($request->input("hospital_password"));
-            $hospital->hospital_password1 = $request->input("hospital_password1");
-            $hospital->password_status = 1;
+            $hospital->latitude = $request->input("latitude");
+            $hospital->longitude = $request->input("longitude");
 
             $hospital->update();
+
+            Session::put('hospital',$hospital);
 
             return back()->with("status", "votre mot de passe a été mis à jour avec succès !!!");
 
@@ -110,7 +123,7 @@ class HospitalController extends Controller
     public function productsprices(){
         try {
             //code...
-            $productprices = Productprice::get();
+            $productprices = Productprice::where('hospital',Session::get('hospital')->hospital_name)->get();
             $increment = 1;
 
             return view("hospital.price")->with("productprices", $productprices)->with("increment", $increment);
@@ -124,8 +137,27 @@ class HospitalController extends Controller
     public function addprice(){
         try {
             //code...
-            $bloodbags = Bloodbag::where("price_status",0)->get();
-            return view("hospital.addprice")->with("bloodbags", $bloodbags);
+            $bloodbags = Bloodbag::get();
+            $productprices = Productprice::where("hospital",Session::get('hospital')->hospital_name)->get();
+
+            $bloodbags1 = array();
+
+            if(count($productprices) > 0){
+                foreach ($bloodbags as $bloodbag) {
+                    foreach ($productprices as $productprice) {
+                        if($bloodbag->designation != $productprice->designation){
+                            array_push($bloodbags1, $bloodbag->designation);
+                        }
+                    }
+                }
+                $count = 1;
+                return view("hospital.addprice")->with("bloodbags1", $bloodbags1)->with("count", $count);
+            }
+            else{
+                $count = 0;
+                return view("hospital.addprice")->with("bloodbags", $bloodbags)->with("count", $count);
+            }
+
             
         } catch (\Throwable $th) {
             //throw $th;
@@ -137,7 +169,7 @@ class HospitalController extends Controller
         try {
             //code...
             $this->validate($request, [
-                'designation' => 'required|string|unique:productprices,designation',
+                'designation' => 'required|string',
                 'price' => 'required|integer'
             ]);
 
@@ -146,6 +178,7 @@ class HospitalController extends Controller
 
             $productprice->designation = $request->input('designation');
             $productprice->price = $request->input('price');
+            $productprice->hospital = Session::get('hospital')->hospital_name;
 
             $productprice->save();
 
@@ -185,7 +218,7 @@ class HospitalController extends Controller
             $productprice = Productprice::find($id);
             $productprice->price = $request->input('price');
 
-            $stock = Stock::where("designation",$request->input('designation'))->first();
+            $stock = Stock::where("designation",$request->input('designation'))->where("hospital",Session::get('hospital')->hospital_name)->first();
             
             if ($stock) {
                 # code...
@@ -207,7 +240,9 @@ class HospitalController extends Controller
     public function viewstocks(){
         try {
             //code...
-            $stocks = Stock::where("hospital",Session::get('hospital')->hospital_name)->get();
+            $stocks = Stock::where("hospital",Session::get('hospital')->hospital_name)->where("bloodsquantity",">",0)
+            ->orderBy("expirationdate", "asc")
+            ->get();
             $increment = 1;
             return view('hospital.stock')->with('stocks', $stocks)->with('increment', $increment);
         } catch (\Throwable $th) {
@@ -248,10 +283,13 @@ class HospitalController extends Controller
             //code...
             $this->validate($request, [
                 'designation' => 'required|string',
-                'bloodsquantity' => 'required|integer'
+                'bloodsquantity' => 'required|integer',
+                'batchcode' => 'required|string',
+                'collectiondate' => 'required|date',
+                'expirationdate' => 'required|date|after_or_equal:collectiondate',
             ]);
     
-            $productprice = Productprice::where("designation",$request->input('designation'))
+            $productprice = Productprice::where("designation",$request->input('designation'))->where("hospital",Session::get('hospital')->hospital_name)
             ->first();
     
             $stocktrace = new Stocktrace();
@@ -259,8 +297,12 @@ class HospitalController extends Controller
             $stocktrace->bloodsquantity = $request->input('bloodsquantity');
             $stocktrace->bloodsprice = $productprice->price;
             $stocktrace->hospital = Session::get("hospital")->hospital_name;
+            $stocktrace->batchcode = $request->input('batchcode');
+            $stocktrace->collectiondate = $request->input('collectiondate');
+            $stocktrace->expirationdate = $request->input('expirationdate');
     
             $stock = Stock::where("designation",$request->input('designation'))
+                          ->where("batchcode",$request->input('batchcode'))
                           ->where("hospital", Session::get("hospital")->hospital_name)
                           ->first();
     
@@ -272,6 +314,11 @@ class HospitalController extends Controller
                 $stock->bloodsprice = $productprice->price;
                 $stock->hospital = Session::get("hospital")->hospital_name;
                 $stock->address = Session::get("hospital")->hospital_address;
+                $stock->batchcode = $request->input('batchcode');
+                $stock->collectiondate = $request->input('collectiondate');
+                $stock->expirationdate = $request->input('expirationdate');
+                $stock->latitude = Session::get("hospital")->latitude;
+                $stock->longitude = Session::get("hospital")->longitude;
                 
                 $stock->save();
                 $stocktrace->save();
@@ -359,13 +406,37 @@ class HospitalController extends Controller
     }
 
     public function bloodbagsearch(Request $request){
-        
+
         try {
             //code...
-            $stocks = Stock::where("hospital","!=",Session::get("hospital")->hospital_name)->get();
+
+            $stocks = Stock::where("hospital","!=",Session::get("hospital")->hospital_name)
+                            ->where("bloodsquantity",">",0)
+                            ->selectRaw("SUM(bloodsquantity) as bloodsquantity")
+                            ->selectRaw("designation")
+                            ->selectRaw("hospital")
+                            ->selectRaw("bloodsprice")
+                            ->selectRaw("address")
+                            ->selectRaw("latitude")
+                            ->selectRaw("longitude")
+                            ->groupBy('hospital', 'designation', 'bloodsprice', 'address', 'latitude', 'longitude')
+                            ->get();
             $increment = 1;
+            $increment1 = 0;
+
+            $distances = array();
+            $stockids= array();
+
+            foreach ($stocks as $stock) {
+                // $this->distance(-4.321289, 15.274256, -4.3231802, 15.2759957, "K");
+                $stockid = Stock::where("designation",$stock->designation)->where("hospital",$stock->hospital)->first();
+                $distance = $this->distance(Session::get("hospital")->latitude, Session::get("hospital")->longitude, $stock->latitude, $stock->longitude, "K");
+                array_push($distances, round($distance*1000)." mètres");
+                array_push($stockids, $stockid->id);
+            }
     
-            return view("hospital.bloodbagsearch")->with("stocks",$stocks)->with("increment",$increment);       
+            return view("hospital.bloodbagsearch")->with("stocks",$stocks)->with("distances",$distances)->with("stockids",$stockids)->with("increment",$increment)->with("increment1",$increment1);  
+
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with("error", $th->getMessage());
@@ -373,16 +444,14 @@ class HospitalController extends Controller
 
     }
 
-    public function addbloodbagtocart($id){
+    public function addbloodbagtocart($id, $bloodsquantity){
         try {
             //code...
             $bloodbag = Stock::find($id);
             
             $oldCart = Session::has('cart') ? Session::get('cart') : null;
             $cart = new Cart($oldCart);
-            $cart->add($bloodbag);
-    
-            // point g et honte
+            $cart->add($bloodbag, $bloodsquantity);
     
             Session::put('cart', $cart);
             Session::put('topCart', $cart->items);
@@ -441,30 +510,163 @@ class HospitalController extends Controller
     }
 
     public function pay(Request $request){
+
+        try {
+                $ids = Session::get("hospital")->hospital_email."_".time();
+
+                $order = new Order();
+                $order->hospital_name = Session::get("hospital")->hospital_name;
+                $order->hospital_address = Session::get("hospital")->hospital_address;
+                $order->hospital_email = Session::get("hospital")->hospital_email;
+                $order->hospital_phone = Session::get("hospital")->hospital_phone;
+                $order->timeid = $ids;
+                $order->cart = serialize(Session::get('cart'));
+
+                foreach (Session::get('topCart') as $item) {
+                    # code... 
+                    $invoice = new Invoice();
+                    $invoice->orderid = $ids;
+
+                    $invoice->designation = $item['designation'];
+                    $invoice->qty = $item['qty'];
+                    $invoice->hospital = $item['hospital'];
+                    $invoice->price = $item['bloodsprice'];
+                    $invoice->save();
+                }
+
+                $order->save();
+
+                Session::forget('cart');
+                Session::forget('topCart');
+                
+                return redirect("hospital/bloodbagsearch")->with("status", "Votre commande a été effectuée avec succès !!!");
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with("error", $th->getMessage());
+        }
+    }
+
+    public function bloodbagorder(){
+
+        try {
+                //code...
+
+                $orders = Order::where("hospital_name", Session::get("hospital")->hospital_name)->get();
+                $increment = 1;
+        
+                $orders->transform(function($order, $key){
+                    $order->cart = unserialize($order->cart);
+        
+                    return $order;
+                });
+        
+                return view('hospital.bloodbagorder')->with('orders', $orders)->with('increment', $increment);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with("error", $th->getMessage());
+        }
+
+    }
+
+    public function bloodsell(){
+
+        try {
+                //code...
+                $orders = Order::where("hospital_name","!=", Session::get("hospital")->hospital_name)->get();
+                $increment = 1;
+        
+                $orders->transform(function($order, $key){
+                    $order->cart = unserialize($order->cart);
+        
+                    return $order;
+                });
+        
+                return view('hospital.bloodsell')->with('orders', $orders)->with('increment', $increment);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with("error", $th->getMessage());
+        }
+
+    }
+
+    public function vieworder($timeid){
+
+        try {
+                //code...
+                $invoices = Invoice::where("orderid",$timeid)->where("hospital",Session::get("hospital")->hospital_name)->where("status",0)->get();
+
+                return view('hospital.vieworder')->with("invoices",$invoices);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with("error", $th->getMessage());
+        }
+
+    }
+
+    public function validateorder(Request $request, $orderid, $hospital, $designation){
         try {
             //code...
-            $response = Http::post('http://marchand.maishapay.online/payment/vers1.0/merchant/checkout', [
-    
-                'gatewayMode' => 1,
-                'role' => 'Privacy Consultant',
-    
-                'publicApiKey' => 'MP-LIVEPK-$1oOa5uuIor0y.1WdiPi1b5eW7em3$S1qqecrO1eit$0XKjFEPVNCslV/gn0$buQa$FRC2$yPy7csObk.az.2WEKBC2w5oneUMJI1pygJIHH20TqmBiVIr3a',
-    
-                'secretApiKey' => 'MP-LIVEPK-zaXken$$RxLKOJ0VKgoqU1cKFmB2q$lDk3x19sQBLrM0gxJnr10VFlD.M/yT.FyJvNAgqAB1ewwIypDjQVg90hiCQ6I2GecaEdig1Iq1$ylevK$ff5h$Qssz',
-    
-                'transactionReference' => 'ABCD',
-                'montant' => 100,
-                'devise' => "USD",
-                'customerFullName' => 'John doe',
-                'customerPhoneNumber' => '',
-                'customerEmailAddress' => '',
-                'chanel' => 'MOBILEMONEY',
-                'provider' => 'MPESA',
-                'walletID' => '+243824754958',
-                'callbackUrl' => 'http://127.0.0.1:8000/hospital/bloodbagsearch'
-            ]);
-    
-            return $response;
+
+            $invoice = Invoice::where("orderid",$orderid)->where("hospital",$hospital)->where("designation",$designation)->first();
+
+            $stocks = Stock::where('designation',$invoice->designation)->get();
+            
+            $end = 0;
+
+            $qty = $request->input('qty');
+
+            foreach ($stocks as $stock) {
+                # code...
+                if($stock->designation == $invoice->designation && $stock->bloodsquantity > 0 && $end == 0){
+                    if ($stock->bloodsquantity >= $qty) {
+                        # code...
+                        $stock->bloodsquantity = $stock->bloodsquantity - $qty;
+                        $end = 1;
+                    }
+                    else{
+                        $stock->bloodsquantity = 0;
+                        $qty = $qty - $stock->bloodsquantity;
+                    }
+                    $stock->update();
+                }
+            }
+
+            $invoice->status = 1;
+            $invoice->update();
+
+            return back();
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with("error", $th->getMessage());
+        }
+    }
+
+    public function distance($lat1, $lon1, $lat2, $lon2, $unit) {
+        try {
+                //code...
+                if (($lat1 == $lat2) && ($lon1 == $lon2)) {
+                    return 0;
+                }
+                else {
+                $theta = $lon1 - $lon2;
+                $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+                $dist = acos($dist);
+                $dist = rad2deg($dist);
+                $miles = $dist * 60 * 1.1515;
+                $unit = strtoupper($unit);
+            
+                if ($unit == "K") {
+                    return ($miles * 1.609344);
+                } else if ($unit == "N") {
+                    return ($miles * 0.8684);
+                } else {
+                    return $miles;
+                }
+                }
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with("error", $th->getMessage());
@@ -472,6 +674,20 @@ class HospitalController extends Controller
     }
 }
 
+// première couleur : #E6442B
+// deuxième couleur : #E6442B
+
+
+// $num = "3.14";
+// $int = (int)$num;
+// $float = (float)$num;
+
+// Ascension groupe Rdc
+// Nous sommes une entreprise de service dont les activités sont axées sur  l’organisation des conférences, formations professionnelles, séminaires dans différents domaines et séjours touristiques à  travers le monde.
+
+// Monsieur Olivier GOGA LINGO WA DONDO
+// A effectué son parcours professionnel dans le secteur bancaire, il a travaille dans la gestion des grandes Entreprises.
+// Ascension groupe rdc est le fruits d’une réflexion d’un rendement professionnel qualificatif, dans le souci de contribuer à l’éthique et déontologie dans le monde du travail, des découvertes culturelles et des voyages à traves le globe.
 
 // https://onlinecode.org/laravel-how-to-prevent-browser-back-button-after-user-logout-2/
 // https://larainfo.com/blogs/laravel-9-rest-api-image-upload-with-validation-example
@@ -516,3 +732,60 @@ class HospitalController extends Controller
 //     Point(lng, lat)
 //  ) <  ? ", 50000)
 // ->get();
+
+// try {
+//     //code...
+//     $response = Http::post('http://marchand.maishapay.online/payment/vers1.0/merchant/checkout', [
+
+//         'gatewayMode' => 1,
+//         'role' => 'Privacy Consultant',
+
+//         'publicApiKey' => 'MP-LIVEPK-$1oOa5uuIor0y.1WdiPi1b5eW7em3$S1qqecrO1eit$0XKjFEPVNCslV/gn0$buQa$FRC2$yPy7csObk.az.2WEKBC2w5oneUMJI1pygJIHH20TqmBiVIr3a',
+
+//         'secretApiKey' => 'MP-LIVEPK-zaXken$$RxLKOJ0VKgoqU1cKFmB2q$lDk3x19sQBLrM0gxJnr10VFlD.M/yT.FyJvNAgqAB1ewwIypDjQVg90hiCQ6I2GecaEdig1Iq1$ylevK$ff5h$Qssz',
+
+//         'transactionReference' => 'ABCD',
+//         'montant' => 100,
+//         'devise' => "USD",
+//         'customerFullName' => 'John doe',
+//         'customerPhoneNumber' => '',
+//         'customerEmailAddress' => '',
+//         'chanel' => 'MOBILEMONEY',
+//         'provider' => 'MPESA',
+//         'walletID' => '+243824754958',
+//         'callbackUrl' => 'http://127.0.0.1:8000/hospital/bloodbagsearch'
+//     ]);
+
+//     return $response;
+// } catch (\Throwable $th) {
+//     //throw $th;
+//     return back()->with("error", $th->getMessage());
+// }
+
+            // if($request->status == 202){
+
+            //     foreach (Session::get('topCart') as $item) {
+            //         # code...
+            //         $stock = Stock::where("hospital",$item['hospital'])->where("designation",$item['designation'])->first();
+
+            //         if($stock->bloodsquantity > $item['qty']){
+            //             $stock->bloodsquantity = ($stock->bloodsquantity - $item['qty']);
+            //             $stock->update();
+            //         }
+            //     }
+
+            //     $order = new Order();
+            //     $order->hospital_name = Session::get("hospital")->hospital_name;
+            //     $order->hospital_address = Session::get("hospital")->hospital_address;
+            //     $order->hospital_email = Session::get("hospital")->hospital_email;
+            //     $order->hospital_phone = Session::get("hospital")->hospital_phone;
+            //     $order->cart = serialize(Session::get('cart'));
+
+            //     $order->save();
+                
+            //     return redirect("hospital/bloodbagsearch")->with("status", "Votre achat a été effectué avec succès !!!");
+            // } 
+            // elseif ($request->status == 400) {
+            //     # code...
+            //     return redirect("hospital/bloodbagsearch")->with("error", "Votre achat a échoué !!!");
+            // }

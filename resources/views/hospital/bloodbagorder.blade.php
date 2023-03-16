@@ -11,9 +11,9 @@
            <div class="content-header-left">
               <h1>Stocks</h1>
            </div>
-           <div class="content-header-right">
-              <a href="{{ url('hospital/addstock', []) }}" class="btn btn-primary btn-sm">Ajouter un nouveau stock</a>
-           </div>
+           {{-- <div class="content-header-right">
+              <a href="{{ url('admin/addstock', []) }}" class="btn btn-primary btn-sm">Ajouter un nouveau</a>
+           </div> --}}
         </section>
 
          @if (Session::has("status"))
@@ -45,7 +45,21 @@
                </div>
             </section> 
          @endif
-         
+
+         @if (Request::is('hospital/bloodbagsearch/*'))
+            <div class="row">
+               <div class="col-md-12">
+                     <div class="callout callout-danger">
+                        <button type="button" class="close" style="color: white" aria-label="Close" onclick="closediv(this)">
+                           <span aria-hidden="true">&times;</span>
+                        </button>
+                        <p>jkgsyugd ugshgd</p>
+                     </div>
+               </div>
+            </div>
+         @else
+             
+         @endif
         <section class="content">
            <div class="row">
               <div class="col-md-12">
@@ -55,34 +69,27 @@
                           <thead>
                              <tr>
                                 <th>#</th>
-                                <th>Désignation</th>
-                                {{-- <th>Quantités</th> --}}
-                                <th>Lot</th>
-                                <th>Quantités</th>
-                                <th>Prix</th>
-                                {{-- <th>Hopital</th> 
-                                <th>Actions</th>--}}
+                                {{-- <th>Hôpital</th>
+                                <th>Adresse</th>
+                                <th>Email</th> --}}
+                                <th>Date</th>
+                                <th>Panier</th>
+                                <th>Actions</th>
                              </tr>
                           </thead>
                           <tbody>
-                            @foreach ($stocks as $stock)
+                            @foreach ($orders as $order)
                                 <tr>
                                     <td>{{$increment++}}</td>
-                                    <td>{{$stock->designation}}</td>
-                                    <td>{{$stock->batchcode}}</td>
-                                    <td>{{$stock->bloodsquantity}}</td>
-                                    <td>{{$stock->bloodsprice}} FC</td>
-                                    {{-- <td>{{$stock->hospital}}</td> --}}
-                                    {{--<td style=" display: flex ">
-                                        <a href="{{ url('hospital/editquantity', [$stock->id]) }}" class="btn btn-primary btn-xs">Edit quantité</a>
-
-                                         <form action=" {{ url('admin/deletehospital', [$stock->id]) }} " method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" style="margin-left: 5px;" class="btn btn-danger btn-xs">Delete</button>
-                                        </form> 
+                                    <td>{{$order->created_at}}</td>
+                                    <td>
+                                        @foreach ($order->cart->items as $item)
+                                            {{$item['qty'].' poche(s)  '.$item['designation'].' ;'}}
+                                        @endforeach
                                     </td>
-                                    --}}
+                                    <td>
+                                        <a href="{{ url('hospital/bloodbaginvoice', [$order->timeid]) }}" target="_blank" class="btn btn-primary btn-xs">Voir la facture</a>
+                                    </td>
                                 </tr>
                             @endforeach
                           </tbody>
@@ -90,23 +97,6 @@
                     </div>
                  </div>
         </section>
-        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure want to delete this item?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-danger btn-ok">Delete</a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <!-- end content -->
 @endsection

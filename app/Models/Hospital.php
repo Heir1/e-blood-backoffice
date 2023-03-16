@@ -15,7 +15,7 @@ class Hospital extends Model
         'hospital_email',
         'hospital_phone',
         'hospital_password',
-        'hospital_password1',
-        'password_status'
+        'latitude',
+        'longitude'
     ];
 }

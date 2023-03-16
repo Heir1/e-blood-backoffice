@@ -69,58 +69,50 @@
                           <thead>
                              <tr>
                                 <th>#</th>
-                                <th>Désignation</th>
-                                <th>Quantités</th>
-                                <th>Prix</th>
-                                <th>Hopital</th>
-                                <th>Adresse</th>
-                                <th>Distance</th>
+                                {{-- <th>Hôpital</th>--}}
+                                <th>Date</th>
+                                <th>Hôpital</th>
+                                <th>Description</th> 
                                 <th>Actions</th>
                              </tr>
                           </thead>
-                          <tbody>
-                            @foreach ($stocks as $stock)
-                                <tr>
-                                    <td>{{$increment++}}</td>
-                                    <td>{{$stock->designation}}</td>
-                                    <td>{{$stock->bloodsquantity}}</td>
-                                    <td>{{$stock->bloodsprice}} FC</td>
-                                    <td>{{$stock->hospital}}</td>
-                                    <td>{{$stock->address}}</td>
-                                    <td>{{$distances[$increment1]}}</td>
-                                    <td>
-                                       <form action="{{ url('hospital/addbloodbagtocart', [$stockids[$increment1], $stock->bloodsquantity]) }}" method="post" id="checkout-form">
-                                          @csrf
-                                          <button type="submit" class="btn btn-primary btn-xs">Ajouter au panier</button>
-                                       </form>
-                                    </td>
-                                </tr>
-                                @php
-                                    $increment1++;
-                                @endphp
-                            @endforeach
-                          </tbody>
+                           <tbody>
+                              @foreach ($orders as $order)
+                                 @php
+                                    $confirm=0;
+                                 @endphp
+                                 @foreach ($order->cart->items as $item)
+                                    @if ($item['hospital'] ==  Session::get("hospital")->hospital_name)
+                                       @php
+                                          $confirm = 1
+                                       @endphp
+                                    @endif
+                                 @endforeach
+
+                                 @if ($confirm == 1)
+                                    <tr>
+                                       <td>{{$increment++}}</td>
+                                       <td>{{$order->created_at}}</td>
+                                       <td>{{$order->hospital_name}}</td>
+                                       <td>
+                                          @foreach ($order->cart->items as $item)
+                                             @if ($item['hospital'] ==  Session::get("hospital")->hospital_name)
+                                                {{$item['qty'].' poche(s)  '.$item['designation'].' ;'}}
+                                             @endif
+                                          @endforeach
+                                       </td>
+                                       <td>
+                                          <a href="{{ url('hospital/vieworder', [$order->timeid]) }}" class="btn btn-primary btn-xs">Voir la commande</a>
+                                       </td>
+                                    </tr>
+                                 @endif
+                              @endforeach
+
+                           </tbody>
                        </table>
                     </div>
                  </div>
         </section>
-        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure want to delete this item?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-danger btn-ok">Delete</a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <!-- end content -->
 @endsection

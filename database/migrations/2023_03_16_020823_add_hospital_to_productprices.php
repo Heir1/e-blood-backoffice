@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('productprices', function (Blueprint $table) {
-            $table->id();
-            $table->string("designation")->unique();
-            $table->string("price");
-            $table->timestamps();
+        Schema::table('productprices', function (Blueprint $table) {
+            //
+            $table->string("hospital")->nullable();
         });
     }
 
@@ -28,6 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('productprices');
+        Schema::table('productprices', function (Blueprint $table) {
+            //
+            $table->dropColumn("hospital");
+        });
     }
 };

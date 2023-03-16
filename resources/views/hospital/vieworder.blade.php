@@ -1,7 +1,7 @@
 @extends('hospital_layout.master')
 
 @section('title')
-    Panier
+    Commande
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
     <div class="content-wrapper">
         <section class="content-header">
            <div class="content-header-left">
-              <h1>Panier</h1>
+              <h1>Commande</h1>
            </div>
         </section>
 
@@ -51,40 +51,29 @@
                         <table class="table table-bordered table-hover table-striped">
                             <thead>
                                <tr>
-                                    <th>Hôpital</th>
+                                    {{-- <th>Hôpital</th> --}}
                                     <th>Désignation</th>
                                     <th>Prix unitaire</th>
                                     <th>Quantité</th>
-                                    <th>Prix total</th>
-                                    <th>Action</th>
+                                    {{-- <th>Prix total</th> --}}
+                                    {{-- <th>Action</th> --}}
                                </tr>
                             </thead>
                             <tbody>
-                                @if (Session::has("cart"))
-                                    @foreach (Session::get('topCart') as $item)
-                                        <tr>
-                                             <td>{{$item['hospital']}}</td>
-                                            <td>{{$item['designation']}}</td>
-                                            <td>{{$item['bloodsprice']}} FC</td>
-                                            <td>
-                                            <form action="{{ url('hospital/udateqty', [$item['product_id']]) }}" method="post">
+                                @foreach ($invoices as $invoice)
+                                    <tr>
+                                        <td>{{$invoice->designation}}</td>
+                                        <td>{{$invoice->price}} FC</td>
+                                        <td>
+                                            <form action="{{ url('hospital/validateorder', [$invoice->orderid, $invoice->hospital,$invoice->designation]) }}" method="post">
                                                 @csrf
                                                 @method('PUT')
-                                                <input type="number" min="1" max="{{$item['bloodsquantity']}}" name="qty" required value="{{$item['qty']}}">
-                                                <input type="submit" class="btn btn-primary btn-xs" value="Modifier">
+                                                <input type="number" min="1" max="" name="qty" required value="{{$invoice->qty}}">
+                                                <input type="submit" class="btn btn-primary btn-xs" value="Valider">
                                             </form>
-                                            </td>
-                                            <td>{{$item['bloodsprice']*$item['qty']}} FC</td>
-                                            <td>
-                                                <form action="{{ url('hospital/deletebloodbag', [$item['product_id']]) }}" method="post">
-                                                   @csrf
-                                                   @method('DELETE')
-                                                    <input type="submit" class="btn btn-danger btn-xs" value="X">
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                          </table>
                     </div>

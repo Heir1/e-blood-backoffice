@@ -5,6 +5,7 @@ use App\Http\Middleware\EnsureUserIsValid;
 use App\Http\Middleware\EnsureHospitalIsValid;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HospitalController;
+use App\Http\Controllers\PdfController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,11 @@ Route::middleware([EnsureUserIsValid::class])->group(function () {
     Route::get('admin/edithospital/{id}', [AdminController::class, 'edithospital']);
     Route::put('admin/updatehospital/{id}', [AdminController::class, 'updatehospital']);
     Route::delete('admin/deletehospital/{id}', [AdminController::class, 'deletehospital']);
+    Route::get('admin/volume', [AdminController::class, 'mass']);
+    Route::get('admin/addvolume', [AdminController::class, 'addmass']);
+    Route::post('add/savevolume', [AdminController::class, 'savemass']);
+    Route::get('admin/editvolume/{id}', [AdminController::class, 'editmass']);
+    Route::put('admin/updatevolume/{id}', [AdminController::class, 'updatemass']);
     Route::get('admin/bloodbags', [AdminController::class, 'bloodbags']);
     Route::get('admin/addbloodbag', [AdminController::class, 'addbloodbag']);
     Route::post('admin/createbloodsbag', [AdminController::class, 'createbloodsbag']);
@@ -72,10 +78,15 @@ Route::middleware([EnsureHospitalIsValid::class])->group(function () {
     Route::get('hospital/editprofile/{id}', [HospitalController::class, 'editprofile']);
     Route::put('hospital/updatepassword/{id}', [HospitalController::class, 'updatepassword']);
     Route::get('hospital/bloodbagsearch', [HospitalController::class, 'bloodbagsearch']);
-    Route::get('hospital/addbloodbagtocart/{id}', [HospitalController::class, 'addbloodbagtocart']);
+    Route::post('hospital/addbloodbagtocart/{id}/{bloodsquantity}', [HospitalController::class, 'addbloodbagtocart']);
     Route::get('hospital/bloodbagcart', [HospitalController::class, 'bloodbagcart']);
     Route::put('hospital/udateqty/{id}', [HospitalController::class, 'udateqty']);
     Route::delete('hospital/deletebloodbag/{id}', [HospitalController::class, 'deletebloodbag']);
     Route::post('hospital/pay', [HospitalController::class, 'pay']);
+    Route::get('hospital/bloodbagorder', [HospitalController::class, 'bloodbagorder']);
+    Route::get('hospital/bloodbaginvoice/{timeid}', [PdfController::class, 'bloodbaginvoice']);
+    Route::get('hospital/bloodsell', [HospitalController::class, 'bloodsell']);
+    Route::get('hospital/vieworder/{id}', [HospitalController::class, 'vieworder']);
+    Route::put('hospital/validateorder/{id}/{hospital}/{designation}', [HospitalController::class, 'validateorder']);
 });
 
