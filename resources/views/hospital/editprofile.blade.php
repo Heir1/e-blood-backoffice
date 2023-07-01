@@ -12,7 +12,7 @@
                 <h1>Edit Profile</h1>
             </div>
             <div class="content-header-right">
-                <a onclick="getLocation()" class="btn btn-primary btn-sm">Obtenir la localisation</a>
+                {{-- <a onclick="getLocation()" class="btn btn-primary btn-sm">Obtenir la localisation</a> --}}
             </div>
         </section>
         

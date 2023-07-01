@@ -8,7 +8,7 @@
         <link rel="icon" type="image/png" sizes="32x32" href="{{asset('frontend/assets/uploads/user-1.png')}}" />            
         @include('admin_styles.styles')
     </head>
-    <body class="hold-transition fixed skin-blue sidebar-mini">
+    <body class="hold-transition fixed skin-blue sidebar-mini" onload="getLocation()">
         <div class="wrapper">
 
             {{-- start header --}}

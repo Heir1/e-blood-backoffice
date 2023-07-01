@@ -10,7 +10,10 @@ class Giftprogram extends Model
     use HasFactory;
 
     protected $fillable = [
-        'dateandhour',
+        'p_date',
+        'p_starthour',
+        'p_endhour',
         'campname'
     ];
+
 }

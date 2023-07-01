@@ -22,6 +22,10 @@ use App\Http\Controllers\PdfController;
 //     return view('welcome');
 // });
 
+Route::get('/', [HospitalController::class, 'viewhomepage']);
+Route::get('/apropos', [HospitalController::class, 'apropos']);
+Route::get('/contact', [HospitalController::class, 'contact']);
+
 Route::get('admin/login', [AdminController::class, 'viewloginpage']);
 Route::post('admin/connect', [AdminController::class, 'connect']);
 

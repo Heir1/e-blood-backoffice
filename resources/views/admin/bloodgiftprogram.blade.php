@@ -55,7 +55,8 @@
                           <thead>
                              <tr>
                                 <th>#</th>
-                                <th>Dates et Heures</th>
+                                <th>Dates</th>
+                                <th>Heures</th>
                                 <th>Nom du Camp</th>
                                 <th>Actions</th>
                              </tr>
@@ -64,7 +65,8 @@
                             @foreach ($giftprograms as $giftprogram)
                                 <tr>
                                     <td>{{$increment++}}</td>
-                                    <td>{{$giftprogram->dateandhour}}</td>
+                                    <td>{{$giftprogram->p_date}}</td>
+                                    <td>De {{$giftprogram->p_starthour.' à '.$giftprogram->p_endhour}} </td>
                                     <td>{{$giftprogram->campname}}</td>
                                     <td style=" display: flex "> 
                                        <a href="{{ url('admin/editbloodgiftprogram', [$giftprogram->id]) }}" class="btn btn-primary btn-xs">Modifier</a>

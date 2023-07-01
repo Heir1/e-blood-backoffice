@@ -53,7 +53,7 @@
                     </div>
                         </section>
                 @endif
-            <form action=" {{ url('admin/connect', []) }} " method="post">
+            <form action="{{ url('admin/connect', []) }}" method="post">
                 @csrf			
                <div class="form-group has-feedback">
                   <input class="form-control" placeholder="Email address" name="email" type="email" required>

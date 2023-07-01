@@ -19,6 +19,18 @@ class HospitalController extends Controller
 {
     //
 
+    public function viewhomepage(){
+        return view("client.home");
+    }
+
+    public function apropos(){
+        return view("client.about");
+    }
+
+    public function contact(){
+        return view("client.contact");
+    }
+
     public function viewhospitallogin(){
         try {
             //code...

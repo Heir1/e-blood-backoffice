@@ -319,6 +319,19 @@ select {
   background: #d3f9b4 !important;
 }
 
+/* .bg-r {
+  background: #f9cccc !important;
+} */
+
 .bg-r {
   background: #f9cccc !important;
+}
+
+.btn-success{
+  background-color: #3a0505 !important;
+}
+
+.btn-primary{
+
+  background-color: #3a0505 !important;
 }

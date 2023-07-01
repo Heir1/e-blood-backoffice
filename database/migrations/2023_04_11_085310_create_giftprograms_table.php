@@ -15,7 +15,9 @@ return new class extends Migration
     {
         Schema::create('giftprograms', function (Blueprint $table) {
             $table->id();
-            $table->string('dateandhour');
+            $table->string('p_date');
+            $table->string('p_starthour');
+            $table->string('p_endhour');
             $table->string('campname');
             $table->timestamps();
         });

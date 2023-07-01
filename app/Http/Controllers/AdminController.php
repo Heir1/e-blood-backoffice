@@ -438,15 +438,20 @@ class AdminController extends Controller
     public function savebloodgiftprogram(Request $request){
         
         try {
-
+            
+            
             //code...
             $fields = $request->validate([
-                'dateandhour' => 'required|string',
+                'p_date' => 'required|string',
+                'p_starthour' => 'required|string',
+                'p_endhour' => 'required|string',
                 'campname' => 'required|string'
             ]);
     
             $giftprogram = Giftprogram::create([
-                'dateandhour' => $fields['dateandhour'],
+                'p_date' => $fields['p_date'],
+                'p_starthour' => $fields['p_starthour'],
+                'p_endhour' => $fields['p_endhour'],
                 'campname' => $fields['campname'],
             ]);
 
